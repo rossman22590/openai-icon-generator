@@ -1,24 +1,57 @@
 import { useEffect, useState } from 'react'
-import Head from 'next/head'
+import Head from 'next/head';
+import { Configuration, OpenAIApi } from "openai";
+
 
 
 export default function Home() {
+  const [transparentActive, setTransparentActive] = useState(false);
+  const [whiteActive, setWhiteActive] = useState(false);
+  const [greyActive, setGreyActive] = useState(false);
+  const [blackACtive, setBlackActive] = useState(false);
+
   const [inputValue, setInputValue] = useState('');
   const [outputResults, setOutputResults] = useState(false);
+  const [downloadAsset, setDownloadAsset] = useState(null);
+
+  const API_KEY = process.env.OPEN_API_KEY
+
   // require('dotenv').config()
   useEffect(() => {
-    console.log('hello')
+    console.log('hello');
+    console.log("API_KEY", API_KEY)
   }, []);
-
+  
 
   const handleRadioSelect = (e:any) => {
     console.log(e);
     // provide active class to item, so user knows its been selected 
     if (e.target.checked) {
-      console.log(e.target)
-      console.log(e.target.parentElement)
-      e.target.parentElement.classList.add('active');
-      alert('this is now active')
+      // console.log(e.target.value)
+      // console.log(e.target.parentElement)
+
+      if (e.target.value === 'transparent') {
+        setTransparentActive(true);
+        setWhiteActive(false);
+        setGreyActive(false);
+        setBlackActive(false);
+      } else if (e.target.value === 'white') {
+        setTransparentActive(false);
+        setWhiteActive(true);
+        setGreyActive(false);
+        setBlackActive(false);
+      } else if (e.target.value === 'grey') {
+        setTransparentActive(false);
+        setWhiteActive(false);
+        setGreyActive(true);
+        setBlackActive(false);
+      } else if (e.target.value === 'black') {
+        setTransparentActive(false);
+        setWhiteActive(false);
+        setGreyActive(false);
+        setBlackActive(true);
+
+      }
     }
   }
 
@@ -72,28 +105,28 @@ export default function Home() {
 
             <div className="grid grid-col-4 grid-flow-col gap-4 ml-6">
               <div className='flex flex-col items-center'>
-                <label htmlFor="transparent" className="flex w-16 h-16 rounded-lg cursor-pointer border-dashed border-2 border-gray-200" onClick={handleRadioSelect}>
+                <label htmlFor="transparent" className={`flex w-16 h-16 rounded-lg border-dashed border-2 border-gray-500 cursor-pointer ${transparentActive ? "active" : ""}`} onClick={handleRadioSelect}>
                   <input className="hidden pointer" type="radio" id="transparent" name="transparent" value="transparent" />
                 </label>
                  Transparent
               </div>
 
               <div className='flex flex-col items-center'>
-                <label htmlFor="white" className="flex w-16 h-16 border rounded-lg cursor-pointer" onClick={handleRadioSelect}>
+                <label htmlFor="white" className={`flex w-16 h-16 border rounded-lg cursor-pointer ${whiteActive ? "active" : ""}`} onClick={handleRadioSelect}>
                   <input className="hidden pointer" type="radio" id="white" name="white" value="white" />
                 </label>
                  White
               </div>
 
               <div className='flex flex-col items-center'>
-                <label htmlFor="grey" className="flex w-16 h-16 border bg-gray-200 rounded-lg cursor-pointer" onClick={handleRadioSelect}>
+                <label htmlFor="grey" className={`flex w-16 h-16 border rounded-lg bg-gray-200 cursor-pointer ${greyActive ? "active" : ""}`} onClick={handleRadioSelect}>
                   <input className="hidden pointer" type="radio" id="grey" name="grey" value="grey" />
                 </label>
                  Grey
               </div>
 
               <div className='flex flex-col items-center'>
-                <label htmlFor="black" className="flex w-16 h-16 border bg-black rounded-lg cursor-pointer" onClick={handleRadioSelect}>
+                <label htmlFor="black" className={`flex w-16 h-16 border rounded-lg bg-black cursor-pointer ${blackACtive ? "active" : ""}`} onClick={handleRadioSelect}>
                   <input className="hidden pointer" type="radio" id="black" name="black" value="black" />
                 </label>
                  Black
