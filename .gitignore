@@ -1,2 +1,8 @@
+.gitignore
+.DS_Store
 .env
 node_modules/
+.next/static/webpack/
+.next/cache/
+next-env.d.ts
+postcss.config.js
