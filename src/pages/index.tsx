@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import Head from 'next/head';
 import { Configuration, OpenAIApi } from "openai";
+import { saveAs } from "file-saver";
+
 
 
 
@@ -9,6 +11,7 @@ export default function Home() {
   const [whiteActive, setWhiteActive] = useState(false);
   const [greyActive, setGreyActive] = useState(false);
   const [blackACtive, setBlackActive] = useState(false);
+  const [backgroundColor, setBackgroundColor] = useState('');
 
   const [inputValue, setInputValue] = useState('');
   const [outputResults, setOutputResults] = useState(false);
@@ -35,22 +38,25 @@ export default function Home() {
         setWhiteActive(false);
         setGreyActive(false);
         setBlackActive(false);
+        setBackgroundColor('border-dashed border-2 border-gray-500');
       } else if (e.target.value === 'white') {
         setTransparentActive(false);
         setWhiteActive(true);
         setGreyActive(false);
         setBlackActive(false);
+        setBackgroundColor('bg-white');
       } else if (e.target.value === 'grey') {
         setTransparentActive(false);
         setWhiteActive(false);
         setGreyActive(true);
         setBlackActive(false);
+        setBackgroundColor('bg-gray-200');
       } else if (e.target.value === 'black') {
         setTransparentActive(false);
         setWhiteActive(false);
         setGreyActive(false);
         setBlackActive(true);
-
+        setBackgroundColor('bg-black');
       }
     }
   }
@@ -65,6 +71,19 @@ export default function Home() {
     }
     setOutputResults(true)
   }
+
+  const handleDownload = (e:any) => {
+    e.preventDefault();
+    console.log('download');
+  }
+
+  const saveFile = (e:any) => {
+    e.preventDefault();
+    saveAs(
+      "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+      "example.pdf"
+    );
+  };
   
 
   return (
@@ -135,10 +154,31 @@ export default function Home() {
              
             </div>
           </div>
-          <button className='mt-12 rounded-lg bg-blue-500 text-white p-4 h-auto' type="submit" onClick={handleSubmit}>Generate</button>
+          <button 
+          className='mt-12 rounded-lg bg-blue-500 text-white p-4 h-auto' 
+          type="submit" 
+          onClick={handleSubmit}
+          >
+            Generate
+          </button>
 
           {outputResults && 
-            <div className="mt-12 results-container container rounded-lg flex bg-gray-200 w-16 h-16"></div>
+          <>
+            <div className={`mt-12 results-container container rounded-lg flex justify-center items-center w-16 h-16 ${backgroundColor}`}>
+              <img 
+              className="w-9/12"
+              src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Instagram_icon.png/2048px-Instagram_icon.png" 
+              alt="icon" />
+            </div>
+            <button 
+            className="mt-6 bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center" 
+            onClick={saveFile}
+            >
+              <svg className="fill-current w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z"/></svg>
+              <span>Download</span>
+            </button>
+          </>
+       
           }
         </form>
       </main>
