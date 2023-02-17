@@ -4,6 +4,7 @@ import { Configuration, OpenAIApi } from "openai";
 import { saveAs } from "file-saver";
 
 
+// git rm --cached .next/ -r
 
 
 export default function Home() {
@@ -18,7 +19,7 @@ export default function Home() {
   const [outputResults, setOutputResults] = useState(false);
   const [downloadAsset, setDownloadAsset] = useState(null);
 
-  const API_KEY = process.env.OPEN_API_KEY
+  const API_KEY = process.env.NEXT_PUBLIC_OPEN_API_KEY
 
   // require('dotenv').config()
   useEffect(() => {
@@ -45,31 +46,32 @@ export default function Home() {
         setWhiteActive(true);
         setGreyActive(false);
         setBlackActive(false);
-        setBackgroundColor('bg-white');
+        setBackgroundColor('border-white border-2 bg-white');
       } else if (e.target.value === 'grey') {
         setTransparentActive(false);
         setWhiteActive(false);
         setGreyActive(true);
         setBlackActive(false);
-        setBackgroundColor('bg-gray-200');
+        setBackgroundColor('border-gray-200 border-2 bg-gray-200');
       } else if (e.target.value === 'black') {
         setTransparentActive(false);
         setWhiteActive(false);
         setGreyActive(false);
         setBlackActive(true);
-        setBackgroundColor('bg-black');
+        setBackgroundColor('border-black  border-2 bg-black');
       }
     }
   }
 
-  const handleGenerateIcon = (e:any) => {
+  
+  async function handleGenerateIcon(e:any){
     e.preventDefault();
-    console.log(inputValue)
     if (inputValue === '') {
       setErrorMessage(true)
       setOutputResults(false)
       return;
     }
+
     setOutputResults(true)
     setErrorMessage(false)
   }
