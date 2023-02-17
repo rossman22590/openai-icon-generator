@@ -13,6 +13,7 @@ export default function Home() {
   const [blackACtive, setBlackActive] = useState(false);
   const [backgroundColor, setBackgroundColor] = useState('');
 
+  const [errorMessage, setErrorMessage] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const [outputResults, setOutputResults] = useState(false);
   const [downloadAsset, setDownloadAsset] = useState(null);
@@ -61,15 +62,16 @@ export default function Home() {
     }
   }
 
-  const handleSubmit = (e:any) => {
+  const handleGenerateIcon = (e:any) => {
     e.preventDefault();
     console.log(inputValue)
     if (inputValue === '') {
-      alert('Please add some text');
+      setErrorMessage(true)
       setOutputResults(false)
       return;
     }
     setOutputResults(true)
+    setErrorMessage(false)
   }
 
   const handleDownload = (e:any) => {
@@ -157,10 +159,14 @@ export default function Home() {
           <button 
           className='mt-12 rounded-lg bg-blue-500 text-white p-4 h-auto' 
           type="submit" 
-          onClick={handleSubmit}
+          onClick={handleGenerateIcon}
           >
             Generate
           </button>
+
+          {errorMessage && 
+            <div className="text-red-500 mt-6">Please enter some text</div>
+          }
 
           {outputResults && 
           <>
