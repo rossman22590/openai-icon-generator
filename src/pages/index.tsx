@@ -8,35 +8,34 @@ import { saveAs } from "file-saver";
 
 
 export default function Home() {
+  const API_KEY = process.env.NEXT_PUBLIC_OPEN_API_KEY;
   const [transparentActive, setTransparentActive] = useState(false);
   const [whiteActive, setWhiteActive] = useState(false);
   const [greyActive, setGreyActive] = useState(false);
   const [blackActive, setBlackActive] = useState(false);
-
   const [backgroundColor, setBackgroundColor] = useState('');
   const [showSpinner, setShowSpinner] = useState(false)
-
   const [inputErrorMessage, setInputErrorMessage] = useState(false);
   const [backgroundErrorMessage, setBackgroundErrorMessage] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const [outputResults, setOutputResults] = useState(false);
   const [downloadAsset, setDownloadAsset] = useState(null);
-  const API_KEY = process.env.NEXT_PUBLIC_OPEN_API_KEY;
+
   const imageContainerRef = useRef(null);
   const [imgSrc, setImgSrc] = useState('');
   const generateIconRef = useRef(null);
 
+  const url = "https://api.openai.com/v1/images/generations";
+  const text = inputValue;
+  const imageContainer = imageContainerRef.current;
+  
   useEffect(() => {
     console.log("API_KEY", API_KEY)
   }, []);
   
 
   const handleRadioSelect = (e:any) => {
-    // provide active class to item, so user knows its been selected 
     if (e.target.checked) {
-      // console.log(e.target.value)
-      // console.log(e.target.parentElement)
-
       if (e.target.value === 'transparent') {
         setTransparentActive(true);
         setWhiteActive(false);
@@ -65,13 +64,6 @@ export default function Home() {
     }
   }
 
-
-  const url = "https://api.openai.com/v1/images/generations";
-  const text = inputValue;
-  const imageContainer = imageContainerRef.current;
-  // const btn = generateIconRef.current;
-
-  
   async function handleGenerateIcon(e:any){
     e.preventDefault();
     console.log('image container', imageContainer)
@@ -215,21 +207,20 @@ export default function Home() {
           }
 
           {outputResults && 
-          <>
-            <div className={`mt-12 results-container container rounded-lg flex justify-center items-center w-16 h-16 ${backgroundColor}`}>
-              <div ref={imageContainer} className="fill-current w-10/12">
-                <img src={imgSrc} alt="icon" />
+            <>
+              <div className={`mt-12 results-container container rounded-lg flex justify-center items-center w-16 h-16 ${backgroundColor}`}>
+                <div ref={imageContainer} className="fill-current w-10/12">
+                  <img src={imgSrc} alt="icon" />
+                </div>
               </div>
-            </div>
-            <button 
-            className="mt-6 bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center" 
-            onClick={handleDownload}
-            >
-              <svg className="fill-current w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z"/></svg>
-              <span>Download</span>
-            </button>
-          </>
-       
+              <button 
+              className="mt-6 bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center" 
+              onClick={handleDownload}
+              >
+                <svg className="fill-current w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z"/></svg>
+                <span>Download</span>
+              </button>
+            </>
           }
         </form>
       </main>
